@@ -2,24 +2,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-def plot_data(X, y):
-    fig = plt.figure()
-    ax = fig.add_subplot(1, 1, 1)
-
-    pos = np.where(y == 1)[0]
-    neg = np.where(y == 0)[0]
-    ax.plot(X[pos, 0], X[pos, 1], marker='+', markersize=7,
-            markerfacecolor='k', linestyle='None', label='Admitted')
-    ax.plot(X[neg, 0], X[neg, 1], marker='o', markersize=7,
-            markerfacecolor='y', linestyle='None', label='Not admitted')
-    ax.set_xlabel('Exam 1 score')
-    ax.set_ylabel('Exam 2 score')
-    ax.legend()
-    plt.show()
-
-    return ax
-
-
 def sigmoid(z):
     return 1 / (1 + np.exp(-z))
 
@@ -32,18 +14,6 @@ def cost_function(theta, X, y):
     grad = (1 / m) * np.dot(X.T, h - y)
 
     return (cost, grad)
-
-
-def plot_decision_boundary(theta, X, y):
-    ax = plot_data(X[:, 1:3], y)
-
-    plot_x = np.array([np.min(X[:, 1]), np.max(X[:, 1])])
-    plot_y = (-1 / theta[2, 0]) * (theta[1, 0] * plot_x + theta[0, 0])
-
-    ax.plot(plot_x, plot_y)
-    ax.set_xlim(30, 100)
-    ax.set_ylim(30, 100)
-    plt.show()
 
 
 def predict(theta, X):

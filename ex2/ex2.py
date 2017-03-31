@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from functions import (
-    plot_data, sigmoid, cost_function, plot_decision_boundary, predict
+    sigmoid, cost_function, predict
 )
 
 plt.ion()
@@ -15,9 +15,21 @@ print(
     'Plotting data with + indicating (y = 1) examples '
     'and o indicating (y = 0) examples.\n')
 
-plot_data(X, y)
+pos = np.where(y == 1)[0]
+neg = np.where(y == 0)[0]
+plt.scatter(X[pos, 0], X[pos, 1], color='black', marker='+', label='Admitted')
+plt.scatter(
+    X[neg, 0], X[neg, 1], color='yellow', marker='o', edgecolors='black',
+    label='Not admitted')
+plt.xlabel('Exam 1 score')
+plt.ylabel('Exam 2 score')
+plt.xlim([30, 100])
+plt.ylim([30, 100])
+plt.legend(scatterpoints=1)
+plt.show()
 
 input('Program paused. Press enter to continue.\n')
+plt.close()
 
 # ########## Part2: Compute Cost and Gradient ##########
 m, n = X.shape
@@ -74,9 +86,26 @@ print(' {0:.3f}'.format(theta[2, 0]))
 print('Expected theta (approx):')
 print(' -25.161\n 0.206\n 0.201\n')
 
-plot_decision_boundary(theta, X, y)
+pos = np.where(y == 1)[0]
+neg = np.where(y == 0)[0]
+plt.scatter(X[pos, 1], X[pos, 2], color='black', marker='+', label='Admitted')
+plt.scatter(
+    X[neg, 1], X[neg, 2], color='yellow', marker='o', edgecolors='black',
+    label='Not admitted')
+
+x1 = np.array([X[:, 1].min(), X[:, 1].max()])
+x2 = (-1 / theta[2, 0]) * (theta[1, 0] * x1 + theta[0, 0])
+plt.plot(x1, x2)
+
+plt.xlabel('Exam 1 score')
+plt.ylabel('Exam 2 score')
+plt.xlim([30, 100])
+plt.ylim([30, 100])
+plt.legend(scatterpoints=1)
+plt.show()
 
 input('Program paused. Press enter to continue.\n')
+plt.close()
 
 # ########## Part4: Predict and Accuracies ##########
 score_x = np.array([1, 45, 85]).reshape((3, 1))
