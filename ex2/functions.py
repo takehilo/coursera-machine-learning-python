@@ -3,17 +3,20 @@ import matplotlib.pyplot as plt
 
 
 def sigmoid(z):
+    z = np.where(z > 36, 36, z)
+    z = np.where(z < -709, -709, z)
     return 1 / (1 + np.exp(-z))
 
 
 def cost_function(theta, X, y):
+    theta = theta.reshape(-1, 1)
     m = X.shape[0]
     h = sigmoid(np.dot(X, theta))
 
     cost = (1 / m) * np.sum(-y * np.log(h) - (1 - y) * np.log(1 - h))
     grad = (1 / m) * np.dot(X.T, h - y)
 
-    return (cost, grad)
+    return (cost, grad.ravel())
 
 
 def predict(theta, X):
