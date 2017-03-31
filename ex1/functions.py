@@ -1,14 +1,4 @@
 import numpy as np
-import matplotlib.pyplot as plt
-
-
-def plot_data(x, y):
-    plt.plot(x, y, 'rx', markersize=10, label='Training data')
-    plt.axis([4, 24, -5, 25])
-    plt.xlabel('Population of City in 10,000s')
-    plt.ylabel('Profit in $10,000s')
-    plt.legend()
-    plt.show()
 
 
 def compute_cost(X, y, theta):
