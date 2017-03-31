@@ -1,8 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from functions import (
-    plot_data_reg, map_feature, cost_function_reg, plot_decision_boundary_reg,
-    predict
+    map_feature, cost_function_reg, predict
 )
 
 plt.ion()
@@ -11,9 +10,21 @@ data = np.loadtxt('ex2data2.txt', delimiter=',')
 X = data[:, 0:2]
 y = data[:, 2].reshape(-1, 1)
 
-plot_data_reg(X, y)
+pos = np.where(y == 1)[0]
+neg = np.where(y == 0)[0]
+plt.scatter(X[pos, 0], X[pos, 1], color='black', marker='+', label='y=1')
+plt.scatter(
+    X[neg, 0], X[neg, 1], color='yellow', marker='o', edgecolors='black',
+    label='y=0')
+plt.xlabel('Microchip Test 1')
+plt.ylabel('Microchip Test 2')
+plt.xlim([-1, 1.5])
+plt.ylim([-0.8, 1.2])
+plt.legend(scatterpoints=1)
+plt.show()
 
 input('Program paused. Press enter to continue.\n')
+plt.close()
 
 # ########## Part1: Regularized Logistic Regression ##########
 X = map_feature(X[:, 0].reshape(-1, 1), X[:, 1].reshape(-1, 1))
@@ -63,14 +74,34 @@ for i in range(num_iters):
     costs[i], grad = cost_function_reg(theta, X, y, lam)
     theta -= alpha * grad
 
-fig = plt.figure()
-ax = fig.add_subplot(1, 1, 1)
-ax.plot(np.arange(num_iters), costs)
+pos = np.where(y == 1)[0]
+neg = np.where(y == 0)[0]
+plt.scatter(X[pos, 1], X[pos, 2], color='black', marker='+', label='y=1')
+plt.scatter(
+    X[neg, 1], X[neg, 2], color='yellow', marker='o', edgecolors='black',
+    label='y=0')
+
+x1 = np.linspace(-1, 1.5, 50).reshape(-1, 1)
+x2 = np.linspace(-1, 1.5, 50).reshape(-1, 1)
+Z = np.zeros((x1.size, x2.size))
+
+for i in range(x1.shape[0]):
+    for j in range(x2.shape[0]):
+        Z[i, j] = np.dot(
+            map_feature(x1[i].reshape(-1, 1), x2[j].reshape(-1, 1)),
+            theta
+        )
+
+x1, x2 = np.meshgrid(x1, x2)
+CS = plt.contour(x1, x2, Z.T, levels=[0])
+
+plt.xlabel('Microchip Test 1')
+plt.ylabel('Microchip Test 2')
+CS.collections[0].set_label('Decision Boundary')
+plt.xlim([-1, 1.5])
+plt.ylim([-0.8, 1.2])
+plt.legend(scatterpoints=1)
 plt.show()
-
-input('Program paused. Press enter to continue.\n')
-
-plot_decision_boundary_reg(theta, X, y)
 
 p = predict(theta, X)
 
@@ -78,5 +109,4 @@ print('Train Accuracy: {0:.1f}'.format(np.mean(p == y) * 100))
 print('Expected accuracy (with lambda = 1): 83.1 (approx)')
 
 input('Program paused. Press enter to continue.\n')
-
 plt.close()
