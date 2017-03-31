@@ -8,26 +8,27 @@ plt.ion()
 
 # ########## Part1: Feature Normalization ##########
 print('Loading data ...\n')
+
 data = np.loadtxt('ex1data2.txt', delimiter=',')
 X = data[:, 0:2]
 y = data[:, 2].reshape((-1, 1))
 m = y.size
 
 print('First 10 examples from the dataset:')
-print('x =')
-print(X[0:10, :])
-print('y =')
-print(y[0:10, 0])
+for i in range(10):
+    print(
+        'x = [{0:.0f}, {1:.0f}], y = {2:.0f}'
+        .format(X[i, 0], X[i, 1], y[i, 0]))
 
-input('Program paused. Press enter to continue.\n')
+input('\nProgram paused. Press enter to continue.\n')
 
-print('Normalizing Features ...')
+print('Normalizing Features ...\n')
 
 X, mu, sigma = feature_normalize(X)
 X = np.hstack((np.ones((m, 1)), X))
 
 # ########## Part2: Gradient Descent ##########
-print('Running gradient descent ...')
+print('Running gradient descent ...\n')
 
 alpha = 0.3
 num_iters = 1000
@@ -43,7 +44,7 @@ ax.set_ylabel('Cost J')
 plt.show()
 
 print('Theta computed from gradient descent:')
-print(theta)
+print(theta, '\n')
 
 X = np.array([1650, 3])
 X = (X - mu) / sigma
@@ -53,14 +54,14 @@ price = np.dot(theta.T, X)[0, 0]
 
 print(
     'Predicted price of a 1650 sq-ft, 3 br house '
-    '(using gradient descent): ${0:.0f}'
+    '(using gradient descent): ${0:.0f}\n'
     .format(price)
 )
 
 input('Program paused. Press enter to continue.\n')
 
 # ########## Part3: Normal Equations ##########
-print('Solving with normal equations...')
+print('Solving with normal equations...\n')
 
 data = np.loadtxt('ex1data2.txt', delimiter=',')
 X = data[:, 0:2]
@@ -71,14 +72,14 @@ X = np.hstack((np.ones((m, 1)), X))
 theta = normal_eqn(X, y)
 
 print('Theta computed from the normal equations')
-print(theta)
+print(theta, '\n')
 
 X = np.array([1, 1650, 3]).reshape(3, 1)
 price = np.dot(theta.T, X)[0, 0]
 
 print(
     'Predicted price of a 1650 sq-ft, 3 br house '
-    '(using normal equations): ${0:.0f}'
+    '(using normal equations): ${0:.0f}\n'
     .format(price)
 )
 
