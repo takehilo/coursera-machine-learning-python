@@ -10,7 +10,8 @@ from functions import (
 plt.ion()
 
 # ########## Part2: Plotting ##########
-print('Plotting Data ...')
+print('Plotting Data ...\n')
+
 data = np.loadtxt('ex1data1.txt', delimiter=',')
 X = data[:, 0].reshape((-1, 1))
 y = data[:, 1].reshape((-1, 1))
@@ -21,7 +22,8 @@ plot_data(X, y)
 input('Program paused. Press enter to continue.\n')
 
 # ########## Part3: Gradient descent ##########
-print('Running Gradient Descent ...')
+print('Running Gradient Descent ...\n')
+
 X = np.hstack((np.ones((m, 1)), X))
 theta = np.zeros((2, 1))
 
@@ -32,7 +34,7 @@ print(compute_cost(X, y, theta))
 
 theta = gradient_descent(X, y, theta, alpha, iterations)
 print('Theta found by gradient descent:')
-print(theta[0, 0], theta[1, 0])
+print(theta[0, 0], theta[1, 0], '\n')
 
 plt.plot(X[:, 1], np.dot(X, theta), '-', label='Linear regression')
 plt.legend()
@@ -46,14 +48,15 @@ print(
 
 predict2 = np.dot(np.array([[1, 7]]), theta)[0, 0]
 print(
-    'For population = 70,000, we predict a profit of {0}'
+    'For population = 70,000, we predict a profit of {0}\n'
     .format(predict2 * 10000)
 )
 
 input('Program paused. Press enter to continue.\n')
 
 # ########## Part4: Visualizing J(theta_0, theta_1) ##########
-print('Visualizing J(theta_0, theta_1) ...')
+print('Visualizing J(theta_0, theta_1) ...\n')
+
 theta0_vals = np.linspace(-10, 10, 100)
 theta1_vals = np.linspace(-1, 4, 100)
 
