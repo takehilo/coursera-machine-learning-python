@@ -36,11 +36,10 @@ num_iters = 1000
 theta = np.zeros((3, 1))
 theta, j_history = gradient_descent_multi(X, y, theta, alpha, num_iters)
 
-fig = plt.figure()
-ax = fig.add_subplot(1, 1, 1)
-ax.plot(np.arange(0, num_iters + 1), j_history, '-b', linewidth=2)
-ax.set_xlabel('Number of iterations')
-ax.set_ylabel('Cost J')
+plt.plot(np.arange(num_iters + 1), j_history)
+plt.xlabel('Number of iterations')
+plt.ylabel('Cost J')
+plt.xlim([0, 50])
 plt.show()
 
 print('Theta computed from gradient descent:')
@@ -59,6 +58,7 @@ print(
 )
 
 input('Program paused. Press enter to continue.\n')
+plt.close()
 
 # ########## Part3: Normal Equations ##########
 print('Solving with normal equations...\n')
