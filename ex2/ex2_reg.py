@@ -34,13 +34,11 @@ lam = 1
 cost, grad = cost_function_reg(initial_theta, X, y, lam)
 
 print('Cost at initial theta (zeros): {0:.3f}'.format(cost))
-print('Expected cost (approx): 0.693')
+print('Expected cost (approx): 0.693\n')
+
 print('Gradient at initial theta (zeros) - first five values only:')
-print(' {0:.4f}'.format(grad[0, 0]))
-print(' {0:.4f}'.format(grad[1, 0]))
-print(' {0:.4f}'.format(grad[2, 0]))
-print(' {0:.4f}'.format(grad[3, 0]))
-print(' {0:.4f}'.format(grad[4, 0]))
+for i in range(5):
+    print(' {0:.4f}'.format(grad[i, 0]))
 print('Expected gradients (approx) - first five values only:')
 print(' 0.0085\n 0.0188\n 0.0001\n 0.0503\n 0.0115\n')
 
@@ -50,13 +48,11 @@ test_theta = np.ones((X.shape[1], 1))
 cost, grad = cost_function_reg(test_theta, X, y, lam)
 
 print('Cost at test theta: {0:.2f}'.format(cost))
-print('Expected cost (approx): 2.13')
+print('Expected cost (approx): 2.13\n')
+
 print('Gradient at test theta - first five values only:')
-print(' {0:.4f}'.format(grad[0, 0]))
-print(' {0:.4f}'.format(grad[1, 0]))
-print(' {0:.4f}'.format(grad[2, 0]))
-print(' {0:.4f}'.format(grad[3, 0]))
-print(' {0:.4f}'.format(grad[4, 0]))
+for i in range(5):
+    print(' {0:.4f}'.format(grad[i, 0]))
 print('Expected gradients (approx) - first five values only:')
 print(' 0.3460\n 0.0851\n 0.1185\n 0.1506\n 0.0159\n')
 
@@ -106,7 +102,7 @@ plt.show()
 p = predict(theta, X)
 
 print('Train Accuracy: {0:.1f}'.format(np.mean(p == y) * 100))
-print('Expected accuracy (with lambda = 1): 83.1 (approx)')
+print('Expected accuracy (with lambda = 1): 83.1 (approx)\n')
 
 input('Program paused. Press enter to continue.\n')
 plt.close()
