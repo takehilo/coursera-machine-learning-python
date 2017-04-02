@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from scipy.optimize import minimize
 from functions import (
     map_feature, cost_function_reg, predict
 )
@@ -28,47 +29,44 @@ plt.close()
 
 # ########## Part1: Regularized Logistic Regression ##########
 X = map_feature(X[:, 0].reshape(-1, 1), X[:, 1].reshape(-1, 1))
-initial_theta = np.zeros((X.shape[1], 1))
+initial_theta = np.zeros(X.shape[1])
 
-lam = 1
-cost, grad = cost_function_reg(initial_theta, X, y, lam)
+lambda_ = 1
+cost, grad = cost_function_reg(initial_theta, X, y, lambda_)
 
 print('Cost at initial theta (zeros): {0:.3f}'.format(cost))
 print('Expected cost (approx): 0.693\n')
 
 print('Gradient at initial theta (zeros) - first five values only:')
 for i in range(5):
-    print(' {0:.4f}'.format(grad[i, 0]))
+    print(' {0:.4f}'.format(grad[i]))
 print('Expected gradients (approx) - first five values only:')
 print(' 0.0085\n 0.0188\n 0.0001\n 0.0503\n 0.0115\n')
 
 input('Program paused. Press enter to continue.\n')
 
-test_theta = np.ones((X.shape[1], 1))
-cost, grad = cost_function_reg(test_theta, X, y, lam)
+test_theta = np.ones(X.shape[1])
+cost, grad = cost_function_reg(test_theta, X, y, 10)
 
-print('Cost at test theta: {0:.2f}'.format(cost))
-print('Expected cost (approx): 2.13\n')
+print('Cost at test theta: (with lambda = 10): {0:.2f}'.format(cost))
+print('Expected cost (approx): 3.16\n')
 
 print('Gradient at test theta - first five values only:')
 for i in range(5):
-    print(' {0:.4f}'.format(grad[i, 0]))
+    print(' {0:.4f}'.format(grad[i]))
 print('Expected gradients (approx) - first five values only:')
-print(' 0.3460\n 0.0851\n 0.1185\n 0.1506\n 0.0159\n')
+print(' 0.3460\n 0.1614\n 0.1948\n 0.2269\n 0.0922\n')
 
 input('Program paused. Press enter to continue.\n')
 
 # ########## Part2: Regularization and Accuracies ##########
-theta = np.zeros((X.shape[1], 1))
+lambda_ = 0
 
-lam = 1
-alpha = 0.1
-num_iters = 1000
-costs = np.zeros(num_iters)
+result = minimize(
+    lambda t: cost_function_reg(t, X, y, lambda_), initial_theta, jac=True,
+    method='BFGS', options={'maxiter': 100})
 
-for i in range(num_iters):
-    costs[i], grad = cost_function_reg(theta, X, y, lam)
-    theta -= alpha * grad
+theta = result.x.reshape(-1, 1)
 
 pos = np.where(y == 1)[0]
 neg = np.where(y == 0)[0]

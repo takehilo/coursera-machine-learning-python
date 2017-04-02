@@ -34,15 +34,18 @@ def map_feature(X1, X2):
     return out
 
 
-def cost_function_reg(theta, X, y, lam):
+def cost_function_reg(theta, X, y, lambda_):
+    theta = theta.reshape(-1, 1)
     m = X.shape[0]
-    h = sigmoid(np.dot(X, theta))
-    tmp_theta = np.copy(theta)
-    tmp_theta[0, 0] = 0
+    h = sigmoid(X.dot(theta))
 
-    cost = (1 / m) * np.sum(-y * np.log(h) - (1 - y) * np.log(1 - h)) +\
-           (lam / (2 * m)) * np.sum(tmp_theta ** 2)
+    cost = (1 / m) * np.sum(-y * np.log(h) - (1 - y) * np.log(1 - h))
+    reg = (lambda_ / (2 * m)) * (theta[1:, 0] ** 2).sum()
+    j = cost + reg
 
-    grad = (1 / m) * np.dot(X.T, h - y) + (lam / m) * tmp_theta
+    grad = np.zeros(theta.size)
+    grad[0] = (1 / m) * (h - y).sum()
+    grad[1:] = (1 / m) * (X[:, 1:].T.dot(h - y).ravel())\
+        + (lambda_ / m) * theta[1:, 0]
 
-    return (cost, grad)
+    return (j, grad)
