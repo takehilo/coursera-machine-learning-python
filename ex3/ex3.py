@@ -35,17 +35,17 @@ plt.close()
 # ########## Part2a: Vectorize Logistic Regression ##########
 print('Testing lr_cost_function()\n')
 
-theta_t = np.array([-2, -1, 1, 2]).reshape(4, 1)
+theta_t = np.array([-2, -1, 1, 2])
 X_t = np.hstack((np.ones((5, 1)), np.arange(1, 16).reshape(3, 5).T / 10))
 y_t = np.array([1, 0, 1, 0, 1]).reshape(5, 1)
 lambda_t = 3
-J, grad = lr_cost_function(theta_t, X_t, y_t, lambda_t)
+j, grad = lr_cost_function(theta_t, X_t, y_t, lambda_t)
 
-print('Cost: {0:.6f}'.format(J))
+print('Cost: {0:.6f}'.format(j))
 print('Expected cost: 2.534819\n')
 print('Gradients:')
 for i in range(grad.shape[0]):
-    print(' {0:.6f}'.format(grad[i, 0]))
+    print(' {0:.6f}'.format(grad[i]))
 print('Expected gradients:')
 print(' 0.146561\n -0.548558\n 0.724722\n 1.398003\n')
 
@@ -53,16 +53,10 @@ input('Program paused. Press enter to continue.\n')
 
 # ########## Part2b: One-vs-All Training ##########
 print('Training One-vs-All Logistic Regression...\n')
-lam = 0.1
-costs, all_theta = one_vs_all(X, y, num_labels, lam)
-
-fig = plt.figure()
-ax = fig.add_subplot(1, 1, 1)
-ax.plot(np.arange(costs.shape[1]), costs[0, :])
-plt.show()
+lambda_ = 0.1
+all_theta = one_vs_all(X, y, num_labels, lambda_)
 
 input('Program paused. Press enter to continue.\n')
-plt.close()
 
 # ########## Part3: Predict for One-vs-All ##########
 pred = predict_one_vs_all(all_theta, X)

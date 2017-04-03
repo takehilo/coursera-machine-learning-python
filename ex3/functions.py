@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from scipy.optimize import minimize
 
 
 def display_data(X, example_width=None):
@@ -42,37 +43,36 @@ def sigmoid(z):
     return 1 / (1 + np.exp(-z))
 
 
-def lr_cost_function(theta, X, y, lam):
+def lr_cost_function(theta, X, y, lambda_):
+    theta = theta.reshape(-1, 1)
     m = X.shape[0]
-    h = sigmoid(np.dot(X, theta))
-    tmp_theta = np.copy(theta)
-    tmp_theta[0, 0] = 0
+    h = sigmoid(X.dot(theta))
 
-    cost = (1 / m) * np.sum(-y * np.log(h) - (1 - y) * np.log(1 - h)) +\
-           (lam / (2 * m)) * np.sum(tmp_theta ** 2)
+    cost = (1 / m) * np.sum(-y * np.log(h) - (1 - y) * np.log(1 - h))
+    reg = (lambda_ / (2 * m)) * (theta[1:, 0] ** 2).sum()
+    j = cost + reg
 
-    grad = (1 / m) * np.dot(X.T, h - y) + (lam / m) * tmp_theta
+    grad = np.zeros(theta.size)
+    grad[0] = (1 / m) * (h - y).sum()
+    grad[1:] = (1 / m) * (X[:, 1:].T.dot(h - y).ravel())\
+        + (lambda_ / m) * theta[1:, 0]
 
-    return (cost, grad)
+    return (j, grad)
 
 
-def one_vs_all(X_orig, y, num_labels, lam):
+def one_vs_all(X_orig, y, num_labels, lambda_):
     all_theta = np.zeros((num_labels, X_orig.shape[1] + 1))
     X = np.hstack((np.ones((X_orig.shape[0], 1)), X_orig))
 
-    alpha = 0.99
-    num_iters = 1000
-    costs = np.zeros((num_labels, num_iters))
-
-    # takes about 30 seconds
     for c in range(num_labels):
-        for i in range(num_iters):
-            costs[c, i], grad = lr_cost_function(
-                all_theta[c, :].reshape(-1, 1), X, (y == c) * 1, lam
-            )
-            all_theta[c, :] -= alpha * grad.reshape(-1)
+        result = minimize(
+            lambda t: lr_cost_function(
+                t, X, np.where(y == c, 1, 0), lambda_),
+            all_theta[c, :], jac=True, method='BFGS', options={'maxiter': 100})
 
-    return (costs, all_theta)
+        all_theta[c, :] = result.x
+
+    return all_theta
 
 
 def predict_one_vs_all(all_theta, X_orig):
