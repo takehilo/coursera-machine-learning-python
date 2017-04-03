@@ -43,12 +43,12 @@ input('Program paused. Press enter to continue.\n')
 rp = np.random.permutation(m)
 
 for i in range(m):
-    print('Displaying Example Image\n')
+    print('Displaying Example Image')
     display_data(X[rp[i], :].reshape(1, -1))
 
     pred = predict(Theta1, Theta2, X[rp[i], :].reshape(1, -1))
     print(
-        '\nNeural Network Prediction: {0} (digit {1})\n'
+        'Neural Network Prediction: {0} (digit {1})\n'
         .format(pred[0, 0], np.mod(pred, 10)[0, 0])
     )
 
